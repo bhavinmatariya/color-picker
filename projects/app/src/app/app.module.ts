@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { ColorPickerModule } from 'ngx-color-picker';
+import { ColorPickerModule } from 'ngx-color-picker-new';
 
 import { AppComponent } from './app.component';
 

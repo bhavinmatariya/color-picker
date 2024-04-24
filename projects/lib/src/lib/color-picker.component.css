@@ -173,13 +173,60 @@
   position: relative;
 
   display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin: 4px 6px 8px;
+  width: 25px;
+  height: 25px;
+  margin: 4px 6px 9px;
   border: #a9a9a9 solid 1px;
-  border-radius: 25%;
-
+  border-radius: 15%;
   cursor: pointer;
+}
+
+.preset-color-selected {
+  box-shadow: 0 0 0 1px #0190FE,inset 0 0 0 1px #0190FE,inset 0 0 0 3px #FFFFFF !important;
+}
+
+.preset-color-selected {
+  border: 1px solid #0190fe !important;
+}
+
+.cp_tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.cp_tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.cp_tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.cp_tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 
 .color-picker .preset-area .preset-empty-message {
@@ -440,6 +487,20 @@
   display: inline-block;
 
   font-size: 10px;
+}
+
+.color-picker .cp-label {
+  position: absolute;
+  top: -15px;
+  left: -5px;
+
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  cursor: pointer;
+  text-align: center;
 }
 
 .color-picker .eyedropper-icon {

@@ -127,6 +127,8 @@ export class ColorPickerComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public cpPresetLabel: string;
   public cpPresetColors: string[];
+  public cpPresetTooltips: string[];
+  public activeIndex: number = -1;
   public cpPresetColorsClass: string;
   public cpMaxPresetColorsLength: number;
 
@@ -243,7 +245,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy, AfterViewInit {
     cpOKButtonText: string, cpCancelButton: boolean, cpCancelButtonClass: string,
     cpCancelButtonText: string, cpAddColorButton: boolean, cpAddColorButtonClass: string,
     cpAddColorButtonText: string, cpRemoveColorButtonClass: string, cpEyeDropper: boolean,
-    cpTriggerElement: ElementRef, cpExtraTemplate: TemplateRef<any>): void
+    cpTriggerElement: ElementRef, cpExtraTemplate: TemplateRef<any>, cpPresetTooltips: string[]): void
   {
     this.setInitialColor(color);
 
@@ -287,7 +289,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.fallbackColor = cpFallbackColor || '#fff';
 
-    this.setPresetConfig(cpPresetLabel, cpPresetColors);
+    this.setPresetConfig(cpPresetLabel, cpPresetColors, cpPresetTooltips);
 
     this.cpPresetColorsClass = cpPresetColorsClass;
     this.cpMaxPresetColorsLength = cpMaxPresetColorsLength;
@@ -344,14 +346,26 @@ export class ColorPickerComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initialColor = color;
   }
 
-  public setPresetConfig(cpPresetLabel: string, cpPresetColors: string[]): void {
+  public setPresetConfig(cpPresetLabel: string, cpPresetColors: string[], cpPresetTooltips: string[]): void {
     this.cpPresetLabel = cpPresetLabel;
     this.cpPresetColors = cpPresetColors;
+    this.cpPresetTooltips = cpPresetTooltips;
   }
 
-  public setColorFromString(value: string, emit: boolean = true, update: boolean = true): void {
+  public setColorFromString(value: string, emit: boolean = true, update: boolean = true,index: number = -1): void {
     let hsva: Hsva | null;
+    // this.activeIndex = index;
+    let selectedColourValue = value;
 
+    if (selectedColourValue?.includes('rgb')) {
+      const rgbaValues = selectedColourValue.match(/[\d.]+/g);
+      if (rgbaValues && rgbaValues.length >= 3) {
+        const [r, g, b] = rgbaValues.map(parseFloat);
+        const hexValue = this.rgbaToHex(r, g, b);
+        selectedColourValue = hexValue;
+      }
+    }
+    this.getPresetColourIndex(selectedColourValue);
     if (this.cpAlphaChannel === 'always' || this.cpAlphaChannel === 'forced') {
       hsva = this.service.stringToHsva(value, true);
 
@@ -376,6 +390,44 @@ export class ColorPickerComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       this.updateColorPicker(emit, update);
+    }
+  }
+
+  rgbaToHex(r, g, b) {
+        // Ensure values are within the correct range
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+        // Convert decimal to hex
+        const hexR = r.toString(16).padStart(2, '0');
+        const hexG = g.toString(16).padStart(2, '0');
+        const hexB = b.toString(16).padStart(2, '0');
+        // Return the hexadecimal color
+        return `#${hexR}${hexG}${hexB}`;
+  }
+
+  getPresetColourIndex(value) {
+    const convertedPresetColours = [];
+    this.cpPresetColors?.forEach(c => {
+      if (c?.includes('rgb')) {
+        const rgbaValues = c.match(/[\d.]+/g);
+        if (rgbaValues && rgbaValues.length >= 3) {
+          const [r, g, b] = rgbaValues.map(parseFloat);
+          const hexValue = this.rgbaToHex(r, g, b);
+          convertedPresetColours.push(hexValue);
+        }
+      }
+      else {
+        convertedPresetColours.push(c);
+      }
+    });
+    
+    if (convertedPresetColours?.includes(value)) {
+      const presetIndex = convertedPresetColours.indexOf(value);
+      this.activeIndex = presetIndex;
+    }
+    else {
+        this.activeIndex = -1;
     }
   }
 
@@ -484,7 +536,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy, AfterViewInit {
   public onColorChange(value: { s: number, v: number, rgX: number, rgY: number }): void {
     this.hsva.s = value.s / value.rgX;
     this.hsva.v = value.v / value.rgY;
-
+    this.activeIndex = -1;
     this.updateColorPicker();
 
     this.directiveInstance.sliderChanged({

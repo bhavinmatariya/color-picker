@@ -19,7 +19,7 @@
       "dom"
     ],
     "paths": {
-      "ngx-color-picker": [
+      "ngx-color-picker-new": [
         "./projects/lib/src/public-api.ts"
       ]
     }

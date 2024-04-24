@@ -1,8 +1,8 @@
 {
-  "name": "ngx-color-picker",
+  "name": "ngx-color-picker-new",
   "description": "Color picker widget for Angular",
-  "bugs": "https://github.com/zefoy/ngx-color-picker/issues",
-  "version": "12.0.1",
+  "bugs": "https://github.com/zefoy/color-picker/issues",
+  "version": "2.0.0",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zefoy/ngx-color-picker.git"
+    "url": "https://github.com/bhavinmatariya/color-picker.git"
   },
   "config": {
     "deployToGit": {
-      "repository": "git@github.com:zefoy/ngx-color-picker.git",
+      "repository": "git@github.com:bhavinmatariya/color-picker.git",
       "branch": "gh-pages",
       "folder": "dist/app",
-      "script": "ng build app --configuration production -- --base-href=ngx-color-picker --delete-output-path=false",
+      "script": "ng build app --configuration production -- --base-href=color-picker --delete-output-path=false",
       "commit": "Publishing $npm_package_version",
       "user": {
         "name": "ZEF Devel",

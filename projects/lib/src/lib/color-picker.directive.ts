@@ -71,6 +71,7 @@ export class ColorPickerDirective implements OnChanges, OnDestroy {
 
   @Input() cpPresetLabel: string = 'Preset colors';
   @Input() cpPresetColors: string[];
+  @Input() cpPresetTooltips: string[];
   @Input() cpPresetColorsClass: string = 'cp-preset-colors-class';
   @Input() cpMaxPresetColorsLength: number = 6;
 
@@ -158,9 +159,9 @@ export class ColorPickerDirective implements OnChanges, OnDestroy {
       this.ignoreChanges = false;
     }
 
-    if (changes.cpPresetLabel || changes.cpPresetColors) {
+    if (changes.cpPresetLabel || changes.cpPresetColors || changes.cpPresetTooltips) {
       if (this.dialog) {
-        this.dialog.setPresetConfig(this.cpPresetLabel, this.cpPresetColors);
+        this.dialog.setPresetConfig(this.cpPresetLabel, this.cpPresetColors, this.cpPresetTooltips);
       }
     }
   }
@@ -217,7 +218,7 @@ export class ColorPickerDirective implements OnChanges, OnDestroy {
         this.cpOKButtonText, this.cpCancelButton, this.cpCancelButtonClass,
         this.cpCancelButtonText, this.cpAddColorButton, this.cpAddColorButtonClass,
         this.cpAddColorButtonText, this.cpRemoveColorButtonClass, this.cpEyeDropper, this.elRef,
-        this.cpExtraTemplate);
+        this.cpExtraTemplate,this.cpPresetTooltips);
 
       this.dialog = this.cmpRef.instance;
 
